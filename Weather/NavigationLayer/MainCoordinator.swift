@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 final class MainCoordinator {
     let id: UUID = UUID()
@@ -15,14 +16,13 @@ final class MainCoordinator {
     init(router: Routable) {
         self.router = router
     }
-    
 }
 
 // MARK: - Coordinator
 
 extension MainCoordinator: Coordinator {
     func start() -> UIViewController {
-        #warning("need to setup main view here")
-        return UIViewController()
+        let view = WeatherListView()
+        return HostingController(rootView: view)
     }
 }
