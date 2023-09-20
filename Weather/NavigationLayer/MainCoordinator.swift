@@ -22,7 +22,28 @@ final class MainCoordinator {
 
 extension MainCoordinator: Coordinator {
     func start() -> UIViewController {
-        let view = WeatherListView()
+        let viewModel = WeatherViewModel()
+        viewModel.coordinator = self
+        let view = WeatherListView(viewModel: viewModel)
         return HostingController(rootView: view)
+    }
+}
+
+// MARK: - WeatherListViewViewModelCoordinatorDelegate
+
+extension MainCoordinator: WeatherViewModelCoordinatorDelegate {
+    func weatherListDidTapInputButton() {
+        showWeatherInputView()
+    }
+}
+
+// MARK: - Private
+
+private extension MainCoordinator {
+    func showWeatherInputView() {
+        let viewModel = InputViewModel()
+        let view = WeatherInputView(viewModel: viewModel)
+        let viewController = HostingController(rootView: view)
+        router.present(viewController, animated: true)
     }
 }

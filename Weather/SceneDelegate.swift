@@ -31,8 +31,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.coordinator = coordinator
         
         let _ = coordinator.start()
-        
-        // TODO: - Need to add root coordinator here to rout to the correct use case 
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

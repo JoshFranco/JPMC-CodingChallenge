@@ -25,17 +25,17 @@ struct WeatherListItemView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("\(weather.rawTemp)°")
+            Text("\(Int(weather.rawTemp))°")
                 .font(.title)
                 .foregroundColor(.white)
                 .scenePadding(.vertical)
             
             HStack {
-                Text("H:\(weather.tempHigh)°")
+                Text("H:\(Int(weather.tempHigh))°")
                     .font(.caption)
                     .foregroundColor(.gray)
                 
-                Text("H:\(weather.tempLow)°")
+                Text("H:\(Int(weather.tempLow))°")
                     .font(.caption)
                     .foregroundColor(.gray)
             }

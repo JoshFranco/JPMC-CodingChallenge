@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct WeatherInputView: View {
-    @State private var searchInput: String = ""
+    @StateObject var viewModel: InputViewModel
     
     var body: some View {
         ZStack {
@@ -16,53 +16,83 @@ struct WeatherInputView: View {
                 .ignoresSafeArea()
             
             VStack {
-                HStack {
-                    TextField("", text: $searchInput)
-                        .foregroundColor(.white)
-                        .placeholder(when: searchInput.isEmpty) {
-                            HStack {
-                                Image(systemName: "magnifyingglass")
-                                    .foregroundColor(.gray)
-                                
-                                Text("Search by City Name, State Code, Conutry Code")
-                                    .foregroundColor(.gray)
-                                    .font(.caption)
-                                
-                            }
-                            
-                        }
-                        .padding(4)
-                        .overlay( /// apply a rounded border
-                            RoundedRectangle(cornerRadius: 5)
-                                .stroke(.white, lineWidth: 1)
-                                
-                        )
+                ScrollView {
+                    Spacer(minLength: 16)
                     
-                    Button {
-                        // DO stuff
-                    } label: {
-                        Image(systemName: "location.circle")
-                            .resizable()
+                    HStack {
+                        TextField("", text: $viewModel.searchInput)
                             .foregroundColor(.white)
-                            .frame(width: 24, height: 24)
+                            .placeholder(when: viewModel.searchInput.isEmpty) {
+                                HStack {
+                                    Image(systemName: "magnifyingglass")
+                                        .foregroundColor(.gray)
+                                    
+                                    Text("Search by City Name, State Code, Conutry Code")
+                                        .foregroundColor(.gray)
+                                        .font(.caption)
+                                }
+                            }
+                            .padding(4)
+                            .overlay( /// apply a rounded border
+                                RoundedRectangle(cornerRadius: 5)
+                                    .stroke(.white, lineWidth: 1)
+                                    
+                            )
+                        
+                        Button {
+                            // TODO - Use this button to reactivate the users current location
+                        } label: {
+                            Image(systemName: "location.circle")
+                                .resizable()
+                                .foregroundColor(.white)
+                                .frame(width: 24, height: 24)
+                        }
+                    }
+                    
+                    ForEach(viewModel.searchResults) { result in
+                        VStack(alignment: .leading) {
+                            Button {
+                                // Do stuff
+                            } label: {
+                                Text("\(result.name), \(result.state ?? "n/a"), \(result.countryCode)")
+                                    .foregroundColor(.white)
+                                    .padding()
+                            }
+                        }
                     }
                 }
                 
-                // create list of search results
-                // when the user taps on a search result need to do a api call to get the entire weather object
-                
-                
-                
-                Spacer()
+                Button {
+                    viewModel.search()
+                } label: {
+                    Text("Search")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                }
+                .padding()
+                .background(InternalColor.lightBlue.asColor)
+                .clipShape(RoundedRectangle(cornerRadius: 5))
+
             }
             .padding()
+            
+            if viewModel.isLoading {
+                ActivityIndicator()
+                    .frame(width: 100, height: 100)
+                    .foregroundColor(.orange)
+            }
+        }
+        .alert(viewModel.alertMessage, isPresented: $viewModel.showAlert) {
+            Button("OK", role: .cancel) { }
         }
     }
 }
 
+// MARK: - Preview
+
 struct WeatherInputView_Previews: PreviewProvider {
     static var previews: some View {
-        WeatherInputView()
+        WeatherInputView(viewModel: .init())
     }
 }
 

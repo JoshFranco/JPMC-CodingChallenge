@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct WeatherListView: View {
-    @StateObject var viewModel = WeatherListViewViewModel()
+    @StateObject var viewModel: WeatherViewModel
     
     var body: some View {
         ZStack {
@@ -17,7 +17,7 @@ struct WeatherListView: View {
             
             ScrollView {
                 Button {
-                    // DO stuff
+                    viewModel.inputViewButtonTap()
                 } label: {
                     HStack {
                         Text("Search for new location")
@@ -34,29 +34,22 @@ struct WeatherListView: View {
                     
                 }
 
-                
-                WeatherListItemView(.init(rawTemp: 53,
-                                          tempHigh: 12,
-                                          tempLow: 94,
-                                          location: "McAllen TX",
-                                          condition: "Rain",
-                                          iconId: "10d"))
-                
-                WeatherListItemView(.init(rawTemp: 53,
-                                          tempHigh: 12,
-                                          tempLow: 94,
-                                          location: "McAllen TX",
-                                          condition: "Rain",
-                                          iconId: "10d"))
-                
+                ForEach(viewModel.weatherList) { weather in
+                    WeatherListItemView(weather)
+                }                
             }
             
+            if viewModel.isLoading {
+                ActivityIndicator()
+                    .frame(width: 100, height: 100)
+                    .foregroundColor(.orange)
+            }
         }
     }
 }
 
 struct WeatherListView_Previews: PreviewProvider {
     static var previews: some View {
-        WeatherListView()
+        WeatherListView(viewModel: .init())
     }
 }

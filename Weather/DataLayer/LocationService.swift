@@ -10,7 +10,7 @@ import CoreLocation
 class LocationService: NSObject {
     private let manager = CLLocationManager()
     private var locationResult: (Result<CLLocationCoordinate2D?, Error>) -> Void = { _ in }
-    private var permCompletion: () -> Void = {}
+    private var permCompletion: (CLAuthorizationStatus) -> Void = { _ in }
     
     var hasPermission: Bool {
         switch manager.authorizationStatus {
@@ -28,7 +28,7 @@ class LocationService: NSObject {
         manager.delegate = self
     }
     
-    func requestPermission(completion: @escaping () -> Void) {
+    func requestPermission(completion: @escaping (CLAuthorizationStatus) -> Void) {
         self.permCompletion = completion
         manager.requestWhenInUseAuthorization()
     }
@@ -44,7 +44,7 @@ class LocationService: NSObject {
 
 extension LocationService: CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        permCompletion()
+        permCompletion(manager.authorizationStatus)
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

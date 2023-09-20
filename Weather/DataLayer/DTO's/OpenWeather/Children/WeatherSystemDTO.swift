@@ -7,14 +7,7 @@
 
 import Foundation
 
-struct WeatherSystemDTO {
-    /// Internal parameter
-    let type: Int
-    /// Internal parameter
-    let id: Int
-    /// Internal parameter
-    let message: String?
-    
+struct WeatherSystemDTO {    
     /// Country code (GB, JP etc.)
     let countryCode: String
     /// Sunrise time, unix, UTC
@@ -27,7 +20,7 @@ struct WeatherSystemDTO {
 
 extension WeatherSystemDTO: Codable {
     enum CodingKeys: String, CodingKey {
-        case type, id, message, sunrise, sunset
+        case sunrise, sunset
         case countryCode = "country"
     }
 }

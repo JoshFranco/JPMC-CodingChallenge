@@ -21,8 +21,8 @@ final class HostingController<Content: View>: UIHostingController<Content> {
         super.init(rootView: rootView)
     }
     
-    // TODO: Check
     @objc required dynamic init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented") // only really necessary if using storyboards, but Swift requires it.
+        /// only really necessary if using storyboards, but Swift requires it.
+        fatalError("init(coder:) has not been implemented")
     }
 }
